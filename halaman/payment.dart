@@ -17,11 +17,11 @@ class PaymentProcessPage extends StatefulWidget {
 
 class _PaymentProcessPageState extends State<PaymentProcessPage> {
   String _paymentMethod = 'Pilih Metode Pembayaran';
+  String _selectedBank = 'Pilih Bank'; 
   TextEditingController _creditCardNumberController = TextEditingController();
   TextEditingController _expiryDateController = TextEditingController();
   TextEditingController _cvvController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _bankNameController = TextEditingController();
   TextEditingController _accountNumberController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +32,16 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Proses Pembayaran'),
+        title: RichText(
+          text: TextSpan(
+            text: 'Proses Pembayaran',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: const Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -93,27 +102,31 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                     side: BorderSide(
-                      color: _paymentMethod == 'Pilih Metode Pembayaran' ? const Color.fromARGB(255, 0, 0, 0) : Colors.black,
+                      color: _paymentMethod == 'Pilih Metode Pembayaran'
+                          ? const Color.fromARGB(255, 0, 0, 0)
+                          : Colors.black,
                     ),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                  backgroundColor: _paymentMethod == 'Pilih Metode Pembayaran' ? Colors.white : Colors.white,
+                  backgroundColor: _paymentMethod == 'Pilih Metode Pembayaran'
+                      ? Colors.white
+                      : Colors.white,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Opacity(
-        opacity: _paymentMethod == 'Pilih Metode Pembayaran' ? 0.5 : 1.0, 
-        child: Text(
-          '$_paymentMethod',
-          style: TextStyle(
-            color: _paymentMethod == 'Pilih Metode Pembayaran'
-                ? Colors.black
-                : Colors.black,
-            fontSize: 16,
-          ),
-        ),
-      ),
+                      opacity: _paymentMethod == 'Pilih Metode Pembayaran' ? 0.5 : 1.0,
+                      child: Text(
+                        '$_paymentMethod',
+                        style: TextStyle(
+                          color: _paymentMethod == 'Pilih Metode Pembayaran'
+                              ? Colors.black
+                              : Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                     Icon(Icons.arrow_drop_down),
                   ],
                 ),
@@ -125,8 +138,8 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
               SizedBox(height: 20),
               Center(
                 child: Container(
-                  width: 200, // Sesuaikan lebar sesuai kebutuhan
-                  height: 50, // Sesuaikan tinggi sesuai kebutuhan
+                  width: 200,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(8),
@@ -134,12 +147,11 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_paymentMethod == 'Pilih Metode Pembayaran') {
-  
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Center(
-                              child:Text('Harap pilih metode pembayaran terlebih dahulu.') ,
-                            ) ,
+                              child: Text('Harap pilih metode pembayaran terlebih dahulu.'),
+                            ),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -148,15 +160,19 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, 
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(200),
-                        side: BorderSide(color: Colors.green), 
-        ),
+                        side: BorderSide(color: Colors.green),
+                      ),
                     ),
                     child: Text(
                       'Bayar Sekarang',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 15),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -265,7 +281,9 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
             if (value == null || value.isEmpty) {
               return 'Masukkan nomor HP';
             }
-            // Tambahkan validasi lain sesuai kebutuhan
+            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+              return 'Nomor HP hanya boleh berisi angka';
+            }
             return null;
           },
         ),
@@ -278,25 +296,30 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Masukkan Data Transfer Bank',
+          'Pilih Bank',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 10),
-        TextFormField(
-          controller: _bankNameController,
-          decoration: InputDecoration(
-            labelText: 'Nama Bank',
-            border: OutlineInputBorder(),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Masukkan nama bank';
-            }
-            return null;
+        InkWell(
+          onTap: () {
+            _showBankSelectionBottomSheet(context);
           },
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: 'Nama Bank',
+              border: OutlineInputBorder(),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_selectedBank),
+                Icon(Icons.arrow_drop_down),
+              ],
+            ),
+          ),
         ),
         SizedBox(height: 10),
         TextFormField(
@@ -317,13 +340,76 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
     );
   }
 
+  void _showBankSelectionBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 320,
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            children: [
+              Text(
+                'Pilih Nama Bank',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+              ListTile(
+                title: Text('BCA'),
+                onTap: () {
+                  setState(() {
+                    _selectedBank = 'BCA';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('MANDIRI'),
+                onTap: () {
+                  setState(() {
+                    _selectedBank = 'MANDIRI';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('BNI'),
+                onTap: () {
+                  setState(() {
+                    _selectedBank = 'BNI';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('BRI'),
+                onTap: () {
+                  setState(() {
+                    _selectedBank = 'BRI';
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _showPaymentMethods(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 300,
-          padding: EdgeInsets.symmetric(vertical: 20),
+          height: 250,
+          padding: EdgeInsets.symmetric(vertical: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -399,7 +485,6 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
     _expiryDateController.dispose();
     _cvvController.dispose();
     _phoneNumberController.dispose();
-    _bankNameController.dispose();
     _accountNumberController.dispose();
     super.dispose();
   }
