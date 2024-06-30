@@ -50,38 +50,40 @@ class _BotNavBarState extends State<botNavBar> {
         );
 
         return Scaffold(
-          body: _widgetOptions.elementAt(_selectedIndex),
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: _widgetOptions,
+          ),
           bottomNavigationBar: BottomAppBar(
-  shape: null, 
-  notchMargin: 0,
-  color: backgroundColor,
-  child: Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: List.generate(_icons.length, (index) {
-      return IconButton(
-        icon: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          decoration: BoxDecoration(
-            color: _selectedIndex == index ? _colors[index] : null,
-            borderRadius: BorderRadius.circular(8),
+            shape: null,
+            notchMargin: 0,
+            color: backgroundColor,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(_icons.length, (index) {
+                return IconButton(
+                  icon: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == index ? _colors[index] : null,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      _icons[index],
+                      color: iconColors[index],
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  },
+                );
+              }),
+            ),
           ),
-          padding: EdgeInsets.all(8),
-          child: Icon(
-            _icons[index],
-            color: iconColors[index],
-          ),
-        ),
-        onPressed: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      );
-    }),
-  ),
-),
-
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               showDialog(
@@ -96,8 +98,7 @@ class _BotNavBarState extends State<botNavBar> {
             foregroundColor: Colors.white,
             shape: CircleBorder(),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         );
       },
     );

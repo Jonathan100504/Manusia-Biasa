@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
+// Mengelola tema (terang/gelap)
 class ChangeTheme extends ChangeNotifier {
   bool isDark = false;
 
@@ -9,6 +10,7 @@ class ChangeTheme extends ChangeNotifier {
   }
 }
 
+// Mengelola status notifikasi
 class NotificationProvider extends ChangeNotifier {
   bool isNotificationOn = false;
 
@@ -18,6 +20,7 @@ class NotificationProvider extends ChangeNotifier {
   }
 }
 
+// Mengelola status privasi
 class PrivacyProvider extends ChangeNotifier {
   bool isPrivacyOn = false;
 
@@ -27,6 +30,7 @@ class PrivacyProvider extends ChangeNotifier {
   }
 }
 
+// Model untuk Postingan
 class Post {
   final String imageURL;
   final String category;
@@ -34,6 +38,7 @@ class Post {
   Post({required this.imageURL, required this.category});
 }
 
+// Mengelola daftar postingan (gambar dan kategori)
 class ProfileProvider extends ChangeNotifier {
   List<Post> posts = [];
 
@@ -42,8 +47,15 @@ class ProfileProvider extends ChangeNotifier {
     posts.add(newPost);
     notifyListeners();
   }
+
+  // Metode untuk mengacak daftar postingan
+  void shufflePosts() {
+    posts.shuffle();
+    notifyListeners();
+  }
 }
 
+// Mengelola status "loved" pada gambar
 class LoveProvider extends ChangeNotifier {
   Map<String, bool> lovedImages = {};
 
