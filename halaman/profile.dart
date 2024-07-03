@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:project/halaman/detail.dart';
 import 'package:project/provider.dart';
 import 'package:project/sidepage/setting.dart';
 import 'package:provider/provider.dart';
@@ -33,11 +34,13 @@ class _ProfilState extends State<Profil> {
   }
 
   _scrollListener() {
-    if (_scrollController.offset > 100 && !_scrollController.position.outOfRange) {
+    if (_scrollController.offset > 100 &&
+        !_scrollController.position.outOfRange) {
       setState(() {
         _showAppbar = false;
       });
-    } else if (_scrollController.offset <= 100 && !_scrollController.position.outOfRange) {
+    } else if (_scrollController.offset <= 100 &&
+        !_scrollController.position.outOfRange) {
       setState(() {
         _showAppbar = true;
       });
@@ -48,18 +51,12 @@ class _ProfilState extends State<Profil> {
   Widget build(BuildContext context) {
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, child) {
-        final isDarkMode = Provider.of<ChangeTheme>(context).isDark;
-        final Color textColor = isDarkMode ? Colors.white : Color.fromARGB(255, 33, 33, 33);
-        final Color backgroundColor = isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white;
-        final Color appBarColor = isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Color.fromRGBO(255, 255, 255, 1);
-
         return Scaffold(
-          backgroundColor: backgroundColor,
           body: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: appBarColor,
+                backgroundColor: Color.fromRGBO(255, 255, 255, 1),
                 expandedHeight: 300,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Column(
@@ -77,7 +74,14 @@ class _ProfilState extends State<Profil> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: textColor,
+                          color: Colors.black,
+                          shadows: [
+                            Shadow(
+                              color: Colors.white,
+                              blurRadius: 1,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(height: 10),
@@ -88,7 +92,14 @@ class _ProfilState extends State<Profil> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
-                            color: textColor,
+                            color: Colors.black,
+                            shadows: [
+                              Shadow(
+                                color: Colors.white,
+                                blurRadius: 1,
+                                offset: Offset(1, 1),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -104,7 +115,7 @@ class _ProfilState extends State<Profil> {
                         ),
                       );
                     },
-                    icon: Icon(Icons.settings, color: textColor),
+                    icon: Icon(Icons.settings),
                   )
                 ],
                 toolbarHeight: 30,
@@ -125,28 +136,35 @@ class _ProfilState extends State<Profil> {
                         autoPlayCurve: Curves.fastOutSlowIn,
                         enlargeCenterPage: true,
                       ),
-                      itemCount: profileProvider.posts.length + additionalImages.length,
+                      itemCount: profileProvider.posts.length +
+                          additionalImages.length,
                       itemBuilder: (context, index, _) {
-                        if (index < profileProvider.posts.length) {
-                          final imageURL = profileProvider.posts[index].imageURL;
-                          return Padding(
+                        final imageURL = index < profileProvider.posts.length
+                            ? profileProvider.posts[index].imageURL
+                            : additionalImages[
+                                index - profileProvider.posts.length];
+                        return GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ImageDialog(
+                                  imageUrl: imageURL,
+                                  category: index < profileProvider.posts.length
+                                      ? profileProvider.posts[index].category
+                                      : 'No Category',
+                                );
+                              },
+                            );
+                          },
+                          child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
                               child: Image.network(imageURL, fit: BoxFit.cover),
                             ),
-                          );
-                        } else {
-                          final additionalImageIndex = index - profileProvider.posts.length;
-                          final additionalImageURL = additionalImages[additionalImageIndex];
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.network(additionalImageURL, fit: BoxFit.cover),
-                            ),
-                          );
-                        }
+                          ),
+                        );
                       },
                     ),
                   ],
