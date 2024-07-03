@@ -16,15 +16,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ChangeTheme()),
-        ChangeNotifierProvider(create: (context) => NotificationProvider()),
-        ChangeNotifierProvider(create: (context) => PrivacyProvider()), 
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
-        ChangeNotifierProvider(create: (context) => LoveProvider()),
+        ChangeNotifierProvider(create: (context) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (context) => BookmarkProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
         debugShowCheckedModeBanner: false,
-        home: Login(),
+        home: botNavBar(),
       ),
     );
   }
