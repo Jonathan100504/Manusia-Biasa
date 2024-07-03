@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:project/provider.dart';
+import 'package:project/sidepage/bookmark.dart';
+import 'package:project/sidepage/favorite.dart';
 import 'package:provider/provider.dart';
-import 'package:project/autentikasi/login.dart'; // Import file login.dart di sini
+import 'package:project/autentikasi/login.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key});
@@ -13,13 +15,11 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
-    return Consumer3<ChangeTheme, NotificationProvider, PrivacyProvider>(
-      builder: (context, theme, notification, privacy, child) {
+    return Consumer<ChangeTheme>(
+      builder: (context, theme, child) {
         Color textColor = theme.isDark ? Colors.white : Colors.black;
         Color backColor =
             theme.isDark ? Color.fromARGB(255, 33, 33, 33) : Colors.white;
-        Color lineColor = theme.isDark ? Colors.white : Colors.black; 
-
         return Scaffold(
           backgroundColor: backColor,
           appBar: AppBar(
@@ -50,38 +50,56 @@ class _SettingState extends State<Setting> {
                       );
                     },
                   ),
-                  SizedBox(height: 10),
-                  SwitchListTile(
-                    title: Text(
-                      'Notification',
-                      style: TextStyle(color: textColor),
-                    ),
-                    value: notification.isNotificationOn,
-                    onChanged: (bool val) {
-                      setState(() {
-                        notification.toggleNotification(val);
-                      });
+                  Divider(
+                    color: textColor,
+                    indent: 10,
+                    endIndent: 10,
+                    thickness: 2,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FavoritePage(),
+                        ),
+                      );
                     },
-                  ),
-                  SizedBox(height: 10),
-                  SwitchListTile(
-                    title: Text(
-                      'Privacy',
-                      style: TextStyle(color: textColor),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      color: backColor,
+                      child: Text(
+                        'Favorite',
+                        style: TextStyle(
+                            color: textColor, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    value: privacy.isPrivacyOn,
-                    onChanged: (bool val) {
-                      setState(() {
-                        privacy.togglePrivacy(val);
-                      });
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookmarkPage(),
+                        ),
+                      );
                     },
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      color: backColor,
+                      child: Text(
+                        'Bookmark',
+                        style: TextStyle(
+                            color: textColor, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  Container(
-                    color: lineColor, 
-                    height: 1,
+                  Divider(
+                    color: textColor,
+                    indent: 10,
+                    endIndent: 10,
+                    thickness: 2,
                   ),
-                  SizedBox(height: 20),
                   Image.asset(
                     'assets/qoutes.jpg',
                     width: MediaQuery.of(context).size.width,
@@ -113,7 +131,7 @@ class _SettingState extends State<Setting> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, 
+                      backgroundColor: Colors.red,
                     ),
                     child: Text(
                       'Logout',
