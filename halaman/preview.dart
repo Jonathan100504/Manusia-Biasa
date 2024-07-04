@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:project/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:project/halaman/payment.dart'; // Pastikan jalur impor sesuai
+import 'package:project/halaman/payment.dart'; 
 
 class PreviewPage extends StatelessWidget {
   final List<String> imageList;
@@ -44,7 +44,7 @@ class PreviewPage extends StatelessWidget {
                 children: [
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: 400,
+                      height: 350,
                       aspectRatio: 16 / 9,
                       enlargeCenterPage: true,
                       enableInfiniteScroll: false,

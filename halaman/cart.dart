@@ -85,14 +85,14 @@ class _KeranjangState extends State<Keranjang> with SingleTickerProviderStateMix
                       MaterialPageRoute(builder: (context) => PreviewPage(
                         imageList: ['assets/citybefore.jpg', 'assets/city.jpg'],
                         description: 'City Photography Preset',
-                        additionalDescription: 'dengan menggunakan foto preset ini, dapat merubah foto kamu yang awalnya gelap menjadi terang.',
+                        additionalDescription: 'Dengan menggunakan preset foto ini, dapat merubah foto kamu yang awalnya gelap menjadi terang.',
                         price: 'IDR 80.000',
                       )),
                     );
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    height: 300,
+                    height: MediaQuery.of(context).size.height * 0.3, 
                     width: double.infinity,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -178,8 +178,8 @@ class _KeranjangState extends State<Keranjang> with SingleTickerProviderStateMix
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    buildImageWithText('assets/nature.jpg', 'Nature Preset', 150, 200, 'IDR 20.000', 'assets/naturebefore.jpg', 'assets/nature.jpg', 'Dengan preset alam ini, gambar alam Anda akan terlihat lebih hidup dengan warna yang kaya.'),
-                    buildImageWithText('assets/bnw.jpg', 'Black & White Preset', 150, 200, 'IDR 20.000', 'assets/bnwbefore.jpg', 'assets/bnw.jpg', 'Preset ini akan mengubah gambar Anda menjadi hitam putih, memberikan kesan klasik dan artistik.'),
+                    buildImageWithText('assets/nature.jpg', 'Nature Preset', 'IDR 20.000', 'assets/naturebefore.jpg', 'assets/nature.jpg', 'Dengan preset alam ini, gambar alam Anda akan terlihat lebih hidup dengan warna yang kaya.'),
+                    buildImageWithText('assets/bnw.jpg', 'Black & White Preset', 'IDR 20.000', 'assets/bnwbefore.jpg', 'assets/bnw.jpg', 'Preset ini akan mengubah gambar Anda menjadi hitam putih, memberikan kesan klasik dan artistik.'),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -191,7 +191,7 @@ class _KeranjangState extends State<Keranjang> with SingleTickerProviderStateMix
     );
   }
 
-  Widget buildImageWithText(String imagePath, String text, double height, double width, String price, String beforeImagePath, String afterImagePath, String additionalDescription) {
+  Widget buildImageWithText(String imagePath, String text, String price, String beforeImagePath, String afterImagePath, String additionalDescription) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -205,8 +205,8 @@ class _KeranjangState extends State<Keranjang> with SingleTickerProviderStateMix
         );
       },
       child: Container(
-        height: height,
-        width: width,
+        height: MediaQuery.of(context).size.height * 0.3, // 30% of the screen height
+        width: MediaQuery.of(context).size.width * 0.4, // 40% of the screen width
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(imagePath),
