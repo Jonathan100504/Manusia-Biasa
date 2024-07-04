@@ -402,7 +402,6 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
       },
     );
   }
-
   void _showPaymentMethods(BuildContext context) {
     showModalBottomSheet(
       context: context,
