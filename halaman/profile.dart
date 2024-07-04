@@ -6,6 +6,7 @@ import 'package:project/sidepage/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:project/sidepage/bookmark.dart';
 import 'package:project/sidepage/favorite.dart';
+import 'package:project/autentikasi/login.dart'; // Import halaman Login
 
 class Profil extends StatefulWidget {
   const Profil({Key? key}) : super(key: key);
@@ -36,13 +37,11 @@ class _ProfilState extends State<Profil> {
   }
 
   _scrollListener() {
-    if (_scrollController.offset > 100 &&
-        !_scrollController.position.outOfRange) {
+    if (_scrollController.offset > 100 && !_scrollController.position.outOfRange) {
       setState(() {
         _showAppbar = false;
       });
-    } else if (_scrollController.offset <= 100 &&
-        !_scrollController.position.outOfRange) {
+    } else if (_scrollController.offset <= 100 && !_scrollController.position.outOfRange) {
       setState(() {
         _showAppbar = true;
       });
@@ -155,6 +154,19 @@ class _ProfilState extends State<Profil> {
                       );
                     },
                   ),
+                  ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text('Logout'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Login(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],
@@ -250,13 +262,11 @@ class _ProfilState extends State<Profil> {
                         autoPlayCurve: Curves.fastOutSlowIn,
                         enlargeCenterPage: true,
                       ),
-                      itemCount: profileProvider.posts.length +
-                          additionalImages.length,
+                      itemCount: profileProvider.posts.length + additionalImages.length,
                       itemBuilder: (context, index, _) {
                         final imageURL = index < profileProvider.posts.length
                             ? profileProvider.posts[index].imageURL
-                            : additionalImages[
-                                index - profileProvider.posts.length];
+                            : additionalImages[index - profileProvider.posts.length];
                         return GestureDetector(
                           onTap: () {
                             showDialog(
