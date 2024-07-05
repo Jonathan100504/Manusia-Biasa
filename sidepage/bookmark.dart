@@ -31,7 +31,7 @@ class BookmarkPage extends StatelessWidget {
               isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white;
 
           return Container(
-            color: backgroundColor, // Ubah warna latar belakang sesuai dengan dark mode
+            color: backgroundColor, 
             child: ListView.builder(
               itemCount: provider.bookmarkedImages.length,
               itemBuilder: (context, index) {
@@ -49,7 +49,7 @@ class BookmarkPage extends StatelessWidget {
                     );
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Sesuaikan padding di sini
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5), 
                     child: Container(
                       width: 300,
                       height: 300,
@@ -58,7 +58,7 @@ class BookmarkPage extends StatelessWidget {
                           image: NetworkImage(imageUrl),
                           fit: BoxFit.cover,
                         ),
-                        borderRadius: BorderRadius.circular(10), // Opsi: tambahkan border radius
+                        borderRadius: BorderRadius.circular(10), 
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.3),

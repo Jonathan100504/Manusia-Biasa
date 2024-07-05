@@ -205,8 +205,8 @@ class _KeranjangState extends State<Keranjang> with SingleTickerProviderStateMix
         );
       },
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.3, // 30% of the screen height
-        width: MediaQuery.of(context).size.width * 0.4, // 40% of the screen width
+        height: MediaQuery.of(context).size.height * 0.3, 
+        width: MediaQuery.of(context).size.width * 0.4, 
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(imagePath),

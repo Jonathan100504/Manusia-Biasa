@@ -189,7 +189,7 @@ class _TambahState extends State<Tambah> {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 0), 
+        padding: const EdgeInsets.only(top: 0),
         child: Consumer<ChangeTheme>(
           builder: (context, theme, child) {
             Color textColor = theme.isDark ? Colors.white : Colors.black;
@@ -201,7 +201,7 @@ class _TambahState extends State<Tambah> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 30), // Penambahan margin di sini
+                  SizedBox(height: 30),
                   Expanded(
                     child: InkWell(
                       onTap: () {
@@ -246,7 +246,7 @@ class _TambahState extends State<Tambah> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20), // Penambahan jarak di sini
+                  SizedBox(height: 20),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     child: DropdownButtonFormField<String>(
@@ -297,14 +297,14 @@ class _TambahState extends State<Tambah> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Padding( 
+                  Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20), // Tambahkan padding di sini
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
                               onPressed: () {
                                 _selectDateTime(context);
@@ -312,16 +312,15 @@ class _TambahState extends State<Tambah> {
                               child: Text('Schedule Post', style: TextStyle(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color.fromRGBO(7, 160, 129, 0.527),
-                                minimumSize: Size(120, 40), // Perbesar tombol di sini
-                                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10), // Sesuaikan padding
+                                minimumSize: Size(120, 50),
+                                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 20), // Penambahan jarak di sini
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20), // Tambahkan padding di sini
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_pickedImage == null && _imageURLController.text.isEmpty) {
@@ -332,42 +331,58 @@ class _TambahState extends State<Tambah> {
                                         'Harap masukkan gambar terlebih dahulu.',
                                         textAlign: TextAlign.center,
                                       ),
+                                      duration: Duration(seconds: 3),
                                     ),
                                   );
                                 } else {
-                                  Provider.of<ProfileProvider>(context, listen: false).addPost(
-                                    imageURL: _imageURLController.text.isNotEmpty
-                                        ? _imageURLController.text.trim()
-                                        : '',
-                                    category: _selectedCategory,
-                                    scheduledDateTime: _scheduledDateTime,
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Post added'),
-                                      duration: Duration(seconds: 4),
-                                      action: SnackBarAction(
-                                        label: 'CANCEL',
-                                        onPressed: () {
-                                          Provider.of<ProfileProvider>(context, listen: false)
-                                              .removeLastPost();
-                                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                  setState(() {
-                                    _pickedImage = null;
-                                  });
+                                  if (_scheduledDateTime != null) {
+                                    Provider.of<ProfileProvider>(context, listen: false).addPost(
+                                      imageURL: _imageURLController.text.isNotEmpty
+                                          ? _imageURLController.text.trim()
+                                          : '',
+                                      category: _selectedCategory,
+                                      scheduledDateTime: _scheduledDateTime,
+                                    );
+                                    setState(() {
+                                      _pickedImage = null;
+                                      _scheduledDateTime = null; // Clear scheduled time
+                                    });
 
-                                  Navigator.of(context).popUntil((route) => route.isFirst);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Post added'),
+                                        duration: Duration(seconds: 4),
+                                        action: SnackBarAction(
+                                          label: 'CANCEL',
+                                          onPressed: () {
+                                            Provider.of<ProfileProvider>(context, listen: false)
+                                                .removeLastPost();
+                                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                          },
+                                        ),
+                                      ),
+                                    );
+
+                                    Navigator.of(context).popUntil((route) => route.isFirst);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text(
+                                          'Harap pilih waktu schedule terlebih dahulu.',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                               child: Text('Add Post', style: TextStyle(color: Colors.white)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color.fromRGBO(7, 160, 129, 1),
-                                minimumSize: Size(120, 40), // Perbesar tombol di sini
-                                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10), // Sesuaikan padding
+                                minimumSize: Size(120, 50),
+                                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
                               ),
                             ),
                           ),

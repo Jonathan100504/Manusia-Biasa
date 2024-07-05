@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:project/provider.dart'; 
+import 'package:project/provider.dart';
 
 class ImageDialog extends StatefulWidget {
   final String imageUrl;
@@ -46,76 +46,95 @@ class _ImageDialogState extends State<ImageDialog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Username'),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          'Username',
+          style: TextStyle(
+            color: Colors.white,
+            shadows: [
+              Shadow(color: Colors.black, blurRadius: 5, offset: Offset(1, 1)),
+            ],
+          ),
+        ),
+        backgroundColor: Color.fromRGBO(7, 160, 129, 1),
+        iconTheme: IconThemeData(color: Colors.white),
+        elevation: 4,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-              child: Center(
-                child: AspectRatio(
-                  aspectRatio: 4 / 4,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 500),
-                    child: Image.network(
-                      widget.imageUrl,
-                      fit: BoxFit.cover,
+      body: Consumer<ChangeTheme>(
+        builder: (context, theme, child) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: 4 / 5,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.6),
+                        child: Image.network(
+                          widget.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 8),
-                  IconButton(
-                    icon: _isLiked
-                        ? Icon(Icons.favorite, color: Colors.red, size: 28) 
-                        : Icon(Icons.favorite_border, size: 28), 
-                    onPressed: _toggleLiked,
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 8),
+                      IconButton(
+                        icon: _isLiked
+                            ? Icon(Icons.favorite, color: theme.isDark ? Colors.red : Colors.red, size: 28)
+                            : Icon(Icons.favorite_border, color: theme.isDark ? Colors.white : Colors.black, size: 28),
+                        onPressed: _toggleLiked,
+                      ),
+                      SizedBox(width: 12),
+                      IconButton(
+                        icon: _isSaved
+                            ? Icon(Icons.bookmark, color: theme.isDark ? Colors.blue : Colors.blue, size: 28)
+                            : Icon(Icons.bookmark_border, color: theme.isDark ? Colors.white : Colors.black, size: 28),
+                        onPressed: _toggleSaved,
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 12),
-                  IconButton(
-                    icon: _isSaved
-                        ? Icon(Icons.bookmark, color: Colors.blue, size: 28) 
-                        : Icon(Icons.bookmark_border, size: 28), 
-                    onPressed: _toggleSaved,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage('assets/fotoprofil.jpg'),
+                    ),
+                    title: Text(
+                      'Username',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: theme.isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '666 Followers . 66 Uploads',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: theme.isDark ? Colors.white : Colors.black,
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage('assets/fotoprofil.jpg'), 
-              ),
-              title: Text(
-                'Username', 
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
-              ),
-              subtitle: Text(
-                '666 Followers . 66 Uploads',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.black,
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
+      backgroundColor: Provider.of<ChangeTheme>(context).isDark
+          ? Color.fromARGB(255, 33, 33, 33)
+          : Colors.white,
     );
   }
 }

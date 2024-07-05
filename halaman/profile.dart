@@ -6,8 +6,7 @@ import 'package:project/sidepage/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:project/sidepage/bookmark.dart';
 import 'package:project/sidepage/favorite.dart';
-import 'package:project/autentikasi/login.dart'; // Import halaman Login
-
+import 'package:project/autentikasi/login.dart';
 class Profil extends StatefulWidget {
   const Profil({Key? key}) : super(key: key);
 
@@ -88,7 +87,7 @@ class _ProfilState extends State<Profil> {
                       return SwitchListTile(
                         title: Row(
                           children: [
-                            Icon(Icons.dark_mode, color: Colors.black), // Icon added here
+                            Icon(Icons.dark_mode, color: Colors.black), 
                             SizedBox(width: 10),
                             Text('Dark Mode', style: TextStyle(color: Colors.black)),
                           ],

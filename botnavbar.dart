@@ -17,7 +17,6 @@ class botNavBar extends StatefulWidget {
 class _BotNavBarState extends State<botNavBar> {
   int _selectedIndex = 0;
 
-  // Menambahkan halaman Tambah di sini, tetapi tidak menampilkan tombol tambah untuk halaman ini di Bottom Navigation Bar
   static List<Widget> _widgetOptions = <Widget>[
     Home(),
     Pencarian(),
@@ -91,7 +90,7 @@ class _BotNavBarState extends State<botNavBar> {
               : FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      _selectedIndex = 4;  // Mengarahkan ke halaman Tambah
+                      _selectedIndex = 4;  
                     });
                   },
                   child: Icon(Icons.add),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:project/data.dart'; // Replace with actual data import
-import 'package:project/halaman/detail.dart'; // Replace with actual detail page import
+import 'package:project/data.dart'; 
+import 'package:project/halaman/detail.dart'; 
 import 'package:project/provider.dart';
 
 class Home extends StatefulWidget {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ChangeTheme extends ChangeNotifier {
   bool isDark = false;
 
@@ -10,7 +9,6 @@ class ChangeTheme extends ChangeNotifier {
   }
 }
 
-
 class NotificationProvider extends ChangeNotifier {
   bool isNotificationOn = false;
 
@@ -19,7 +17,6 @@ class NotificationProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
-
 
 class PrivacyProvider extends ChangeNotifier {
   bool isPrivacyOn = false;
@@ -33,21 +30,37 @@ class PrivacyProvider extends ChangeNotifier {
 class Post {
   final String imageURL;
   final String category;
+  final DateTime? scheduledDateTime; 
 
-  Post({required this.imageURL, required this.category});
+  Post({
+    required this.imageURL,
+    required this.category,
+    this.scheduledDateTime,
+  });
 }
-
 
 class ProfileProvider extends ChangeNotifier {
   List<Post> posts = [];
 
-
-  void addPost({required String imageURL, required String category}) {
-    Post newPost = Post(imageURL: imageURL, category: category);
+  void addPost({
+    required String imageURL,
+    required String category,
+    DateTime? scheduledDateTime,
+  }) {
+    Post newPost = Post(
+      imageURL: imageURL,
+      category: category,
+      scheduledDateTime: scheduledDateTime,
+    );
     posts.add(newPost);
-    notifyListeners(); 
+    
+    if (scheduledDateTime != null) {
+     
+      _scheduleNotification(newPost);
+    }
+    
+    notifyListeners();
   }
-
 
   void removeLastPost() {
     if (posts.isNotEmpty) {
@@ -56,33 +69,32 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
- 
   void shufflePosts() {
     posts.shuffle();
     notifyListeners();
   }
-}
 
+ 
+  void _scheduleNotification(Post post) {
+    notifyListeners();
+  }
+}
 
 class LoveProvider extends ChangeNotifier {
   Map<String, bool> lovedImages = {};
-  
 
   void toggleLove(String imageUrl) {
     lovedImages.update(imageUrl, (value) => !value, ifAbsent: () => true);
     notifyListeners();
   }
 
-
   bool isLoved(String imageUrl) {
     return lovedImages[imageUrl] ?? false;
   }
 }
 
-
 class BookmarkProvider extends ChangeNotifier {
   List<String> bookmarkedImages = [];
-
 
   void toggleBookmark(String imageUrl) {
     if (bookmarkedImages.contains(imageUrl)) {
@@ -93,16 +105,13 @@ class BookmarkProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
   bool isBookmarked(String imageUrl) {
     return bookmarkedImages.contains(imageUrl);
   }
 }
 
-
 class FavoriteProvider extends ChangeNotifier {
   List<String> favoriteImages = [];
-
 
   void toggleFavorite(String imageUrl) {
     if (favoriteImages.contains(imageUrl)) {
@@ -113,7 +122,6 @@ class FavoriteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
- 
   bool isFavorite(String imageUrl) {
     return favoriteImages.contains(imageUrl);
   }

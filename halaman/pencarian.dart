@@ -41,48 +41,63 @@ class _PencarianState extends State<Pencarian> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ChangeTheme>(context);
+    bool isDarkMode = themeProvider.isDark;
+
     return Scaffold(
+      backgroundColor: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white,
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: TextField(
+            controller: _searchController,
+            onChanged: filterResults,
+            style: TextStyle(color: isDarkMode ? Colors.white : Color.fromARGB(255, 33, 33, 33)),
+            decoration: InputDecoration(
+              hintText: "Cari sesuatu...",
+              prefixIcon: Icon(
+                Icons.search,
+                color: isDarkMode ? Colors.white : Color.fromARGB(255, 33, 33, 33),
+              ),
+              hintStyle: TextStyle(
+                color: isDarkMode ? Colors.white70 : Color.fromARGB(255, 33, 33, 33),
+              ),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
+        backgroundColor: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white,
+        iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Color.fromARGB(255, 33, 33, 33)),
+        elevation: 0,
+      ),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            title: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: TextField(
-                controller: _searchController,
-                onChanged: filterResults,
-                decoration: const InputDecoration(
-                  hintText: "Cari sesuatu...",
-                  prefixIcon: Icon(Icons.search),
-                ),
-              ),
-            ),
-            floating: true,
-            snap: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
-          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Wrap(
                 alignment: WrapAlignment.center,
-                spacing: 10,
+                spacing: 5, 
+                runSpacing: 5, 
                 children: options.map((option) {
                   return ChoiceChip(
                     label: Text(
                       option,
                       style: TextStyle(
+                        fontSize: 12, 
                         color: selectedOption == option
                             ? Colors.white
-                            : Color.fromARGB(255, 119, 119, 119),
+                            : isDarkMode ? Colors.white : Color.fromARGB(255, 33, 33, 33),
                       ),
                     ),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), 
                     selected: selectedOption == option,
                     selectedColor: Color.fromRGBO(7, 160, 129, 1),
+                    backgroundColor: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white,
                     shape: RoundedRectangleBorder(
                       side: const BorderSide(
                           color: Color.fromARGB(255, 180, 180, 180)),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10), 
                     ),
                     onSelected: (selected) {
                       setState(() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:project/provider.dart';
 import 'package:provider/provider.dart';
-import 'package:project/halaman/payment.dart'; 
+import 'package:project/halaman/payment.dart';
 
 class PreviewPage extends StatelessWidget {
   final List<String> imageList;
@@ -29,12 +29,18 @@ class PreviewPage extends StatelessWidget {
             title: Text(
               'Toko Preset',
               style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 5,
+                    offset: Offset(1, 1),
+                  ),
+                ],
               ),
             ),
-            backgroundColor: backColor,
-            iconTheme: IconThemeData(color: textColor),
+            backgroundColor: Color.fromRGBO(7, 160, 129, 1), 
+            iconTheme: IconThemeData(color: Colors.white), 
           ),
           body: Container(
             color: backColor,
@@ -79,9 +85,7 @@ class PreviewPage extends StatelessWidget {
                                   top: 10,
                                   right: 10,
                                   child: Text(
-                                    imageList.indexOf(imagePath) == 0
-                                        ? 'Before'
-                                        : 'After',
+                                    imageList.indexOf(imagePath) == 0 ? 'Before' : 'After',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -145,13 +149,13 @@ class PreviewPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigasi ke halaman PaymentProcessPage
+                          
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => PaymentProcessPage(
                                 description: description,
                                 price: price,
-                                imageList: imageList, // Menambahkan imageList
+                                imageList: imageList, 
                               ),
                             ),
                           );
@@ -160,9 +164,7 @@ class PreviewPage extends StatelessWidget {
                           side: BorderSide(color: Colors.green),
                           backgroundColor: Colors.green,
                           padding: EdgeInsets.symmetric(horizontal: 50),
-                          
                         ),
-                        
                         child: Text(
                           'Beli Sekarang',
                           style: TextStyle(

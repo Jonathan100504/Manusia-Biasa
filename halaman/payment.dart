@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:project/provider.dart';
 
 class PaymentProcessPage extends StatefulWidget {
   final String description;
