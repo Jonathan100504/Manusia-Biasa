@@ -178,14 +178,19 @@ class _ProfilState extends State<Profil> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Provider.of<ChangeTheme>(context).isDark;
+    final Color scaffoldBackgroundColor =
+        isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white;
+
     return Consumer<ProfileProvider>(
       builder: (context, profileProvider, child) {
         return Scaffold(
+          backgroundColor: scaffoldBackgroundColor,
           body: CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+                backgroundColor: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Color.fromRGBO(255, 255, 255, 1),
                 expandedHeight: 300,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Column(
@@ -203,7 +208,7 @@ class _ProfilState extends State<Profil> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: isDarkMode ? Colors.white : Colors.black,
                           shadows: [
                             Shadow(
                               color: Colors.white,
@@ -217,18 +222,12 @@ class _ProfilState extends State<Profil> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          'Kami hanyalah sekelompok/ sekumpulan/ segerombong/ \nsekawan yang berusaha untuk mengejar cita-cita kami, \ndengan langkah kecil yaitu menyelesaikan UTS ini. ',
+                          'Kami hanyalah sekelompok/ sekumpulan/ segerombong/ \nsekawan yang berusaha untuk mengejar cita-cita kami, \ndengan langkah kecil yaitu menyelesaikan UAS ini. ',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.black,
-                            shadows: [
-                              Shadow(
-                                color: Colors.white,
-                                blurRadius: 1,
-                                offset: Offset(1, 1),
-                              ),
-                            ],
+                            color: isDarkMode ? Colors.white : Colors.black,
+                            
                           ),
                         ),
                       ),
@@ -242,6 +241,8 @@ class _ProfilState extends State<Profil> {
                     },
                     icon: Icon(Icons.menu),
                     iconSize: 35,
+                    color: isDarkMode ? Colors.white : Colors.black,
+
                   )
                 ],
                 toolbarHeight: 50,

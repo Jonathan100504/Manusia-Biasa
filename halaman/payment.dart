@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:project/provider.dart';
 
 class PaymentProcessPage extends StatefulWidget {
   final String description;
@@ -17,7 +19,7 @@ class PaymentProcessPage extends StatefulWidget {
 
 class _PaymentProcessPageState extends State<PaymentProcessPage> {
   String _paymentMethod = 'Pilih Metode Pembayaran';
-  String _selectedBank = 'Pilih Bank'; 
+  String _selectedBank = 'Pilih Bank';
   TextEditingController _creditCardNumberController = TextEditingController();
   TextEditingController _expiryDateController = TextEditingController();
   TextEditingController _cvvController = TextEditingController();
@@ -32,16 +34,21 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: RichText(
-          text: TextSpan(
-            text: 'Proses Pembayaran',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            ),
+        title: Text(
+          'Proses Pembayaran',
+          style: TextStyle(
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                color: Colors.black,
+                blurRadius: 5,
+                offset: Offset(1, 1),
+              ),
+            ],
           ),
         ),
+        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -340,118 +347,106 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
     );
   }
 
-  void _showBankSelectionBottomSheet(BuildContext context) {
+  void _showPaymentMethods(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 320,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            children: [
-              Text(
-                'Pilih Nama Bank',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              title: Center(
+                child: Text(
+                  'Pilih Metode Pembayaran',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 20),
-              ListTile(
-                title: Text('BCA'),
-                onTap: () {
-                  setState(() {
-                    _selectedBank = 'BCA';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              Divider(),
-              ListTile(
-                title: Text('MANDIRI'),
-                onTap: () {
-                  setState(() {
-                    _selectedBank = 'MANDIRI';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              Divider(),
-              ListTile(
-                title: Text('BNI'),
-                onTap: () {
-                  setState(() {
-                    _selectedBank = 'BNI';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              Divider(),
-              ListTile(
-                title: Text('BRI'),
-                onTap: () {
-                  setState(() {
-                    _selectedBank = 'BRI';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+            ),
+            Divider(), // Divider hanya untuk memisahkan judul dari pilihan
+            ListTile(
+              title: Center(child: Text('Kartu Kredit')),
+              onTap: () {
+                setState(() {
+                  _paymentMethod = 'Kartu Kredit';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text('Dompet Digital')),
+              onTap: () {
+                setState(() {
+                  _paymentMethod = 'Dompet Digital';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text('Transfer Bank')),
+              onTap: () {
+                setState(() {
+                  _paymentMethod = 'Transfer Bank';
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
         );
       },
     );
   }
-  void _showPaymentMethods(BuildContext context) {
+
+  void _showBankSelectionBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 250,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Pilih Metode Pembayaran',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              title: Center(
+                child: Text(
+                  'Pilih Bank',
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 20),
-              ListTile(
-                leading: Icon(Icons.credit_card),
-                title: Text('Kartu Kredit'),
-                onTap: () {
-                  setState(() {
-                    _paymentMethod = 'Kartu Kredit';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.account_balance_wallet),
-                title: Text('Dompet Digital'),
-                onTap: () {
-                  setState(() {
-                    _paymentMethod = 'Dompet Digital';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.payment),
-                title: Text('Transfer Bank'),
-                onTap: () {
-                  setState(() {
-                    _paymentMethod = 'Transfer Bank';
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+            ),
+            Divider(), // Divider hanya untuk memisahkan judul dari pilihan
+            ListTile(
+              title: Center(child: Text('Bank Mandiri')),
+              onTap: () {
+                setState(() {
+                  _selectedBank = 'Bank Mandiri';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text('Bank BCA')),
+              onTap: () {
+                setState(() {
+                  _selectedBank = 'Bank BCA';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text('Bank BRI')),
+              onTap: () {
+                setState(() {
+                  _selectedBank = 'Bank BRI';
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Center(child: Text('Bank BNI')),
+              onTap: () {
+                setState(() {
+                  _selectedBank = 'Bank BNI';
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
         );
       },
     );
@@ -463,28 +458,17 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Pembayaran Berhasil'),
-          content: Text('Terima kasih telah melakukan pembayaran.'),
+          content: Text('Terima kasih atas pembayaran Anda.'),
           actions: [
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
               },
-              child: Text('Tutup'),
+              child: Text('OK'),
             ),
           ],
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _creditCardNumberController.dispose();
-    _expiryDateController.dispose();
-    _cvvController.dispose();
-    _phoneNumberController.dispose();
-    _accountNumberController.dispose();
-    super.dispose();
   }
 }
