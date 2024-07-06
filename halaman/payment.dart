@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/botnavbar.dart';
 
 class PaymentProcessPage extends StatefulWidget {
   final String description;
@@ -45,7 +46,7 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
             ],
           ),
         ),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Color.fromRGBO(7, 160, 129, 1),
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -366,7 +367,7 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                 setState(() {
                   _paymentMethod = 'Kartu Kredit';
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -375,7 +376,7 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                 setState(() {
                   _paymentMethod = 'Dompet Digital';
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -384,7 +385,7 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
                 setState(() {
                   _paymentMethod = 'Transfer Bank';
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -409,39 +410,30 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
             ),
             Divider(), // Divider hanya untuk memisahkan judul dari pilihan
             ListTile(
-              title: Center(child: Text('Bank Mandiri')),
+              title: Center(child: Text('BCA')),
               onTap: () {
                 setState(() {
-                  _selectedBank = 'Bank Mandiri';
+                  _selectedBank = 'BCA';
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
-              title: Center(child: Text('Bank BCA')),
+              title: Center(child: Text('BNI')),
               onTap: () {
                 setState(() {
-                  _selectedBank = 'Bank BCA';
+                  _selectedBank = 'BNI';
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
             ListTile(
-              title: Center(child: Text('Bank BRI')),
+              title: Center(child: Text('BRI')),
               onTap: () {
                 setState(() {
-                  _selectedBank = 'Bank BRI';
+                  _selectedBank = 'BRI';
                 });
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Center(child: Text('Bank BNI')),
-              onTap: () {
-                setState(() {
-                  _selectedBank = 'Bank BNI';
-                });
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -455,12 +447,64 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          title: Text('Konfirmasi Pembayaran'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Harga: ${widget.price}'),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      
+                      backgroundColor: Colors.red,
+                      
+                    ),
+                    child: Text('Batal', style:TextStyle(color: Colors.white)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _showSuccessPaymentDialog(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                     
+                      backgroundColor: Colors.green,
+                      
+                    ),
+                    child: Text('Beli', style:TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showSuccessPaymentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
           title: Text('Pembayaran Berhasil'),
           content: Text('Terima kasih atas pembayaran Anda.'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => botNavBar()),
+                  (route) => false,
+                );
               },
               child: Text('OK'),
             ),
@@ -468,5 +512,15 @@ class _PaymentProcessPageState extends State<PaymentProcessPage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _creditCardNumberController.dispose();
+    _expiryDateController.dispose();
+    _cvvController.dispose();
+    _phoneNumberController.dispose();
+    _accountNumberController.dispose();
+    super.dispose();
   }
 }

@@ -2,7 +2,7 @@ class ImageData {
   static final List<List<String>> imagePaths = [
     [
       'Animal',
-      'https://cdn.pixabay.com/photo/2024/01/15/19/40/animal-8510775_960_720.jpg',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4w3cjle9mN5OBhN0Ikf_fnu52cvTfOYcPpw&s',
       'John Doe',
       '500 Followers',
       '100 Uploads',
