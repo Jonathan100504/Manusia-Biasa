@@ -80,7 +80,7 @@ class _PencarianState extends State<Pencarian> {
                 spacing: 5, 
                 runSpacing: 5, 
                 children: options.map((option) {
-                  return ChoiceChip(
+                  return RawChip(
                     label: Text(
                       option,
                       style: TextStyle(
@@ -99,6 +99,7 @@ class _PencarianState extends State<Pencarian> {
                           color: Color.fromARGB(255, 180, 180, 180)),
                       borderRadius: BorderRadius.circular(10), 
                     ),
+                    showCheckmark: false, // Hilangkan centang
                     onSelected: (selected) {
                       setState(() {
                         selectedOption = selected ? option : '';

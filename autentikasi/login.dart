@@ -27,7 +27,11 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    // Mengetahui tinggi keyboard
+    double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false, // Memastikan halaman tidak bergerak saat keyboard muncul
       body: Stack(
         children: [
           Container(
@@ -81,6 +85,7 @@ class _LoginState extends State<Login> {
                 ),
                 color: Colors.white60,
               ),
+<<<<<<< HEAD
               child: Column(
                 children: [
                   SizedBox(height: 50),
@@ -199,14 +204,107 @@ class _LoginState extends State<Login> {
                         Image.asset(
                           'assets/google.png',
                           width: 20,
+=======
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: keyboardHeight),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 50),
+                    TextField(
+                      controller: _username,
+                      decoration: InputDecoration(
+                        labelText: "Username",
+                        hintText: "Input Your Name Here",
+                        errorText: _errorTextUsername.isNotEmpty ? _errorTextUsername : null,
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 25, 25, 25)),
+                        prefixIcon: Icon(Icons.person, color: Colors.black),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(0),
+>>>>>>> ef1e0c82055e93fcce995533ded362064a5fe2ea
                         ),
-                        SizedBox(width: 20),
-                        Text(
-                          'Continue with Google',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _password,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        hintText: "Input Your Password Here",
+                        errorText: _errorTextPassword.isNotEmpty ? _errorTextPassword : null,
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 25, 25, 25)),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          String user = _username.text;
+                          String pass = _password.text;
+                          _errorTextUsername = '';
+                          _errorTextPassword = '';
+
+                          if (user.isEmpty) {
+                            setState(() {
+                              _errorTextUsername = 'Username cannot be empty';
+                            });
+                          }
+
+                          if (pass.isEmpty) {
+                            setState(() {
+                              _errorTextPassword = 'Password cannot be empty';
+                            });
+                          }
+
+                          if (user.isNotEmpty && pass.isNotEmpty) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => botNavBar()),
+                              (route) => false,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(7, 160, 129, 1),
+                          minimumSize: Size(double.infinity, 50),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 30),
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/google.png',
+                            width: 20,
                           ),
+<<<<<<< HEAD
                         ),
                       ],
                     ),
@@ -232,12 +330,47 @@ class _LoginState extends State<Login> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
+=======
+                          SizedBox(width: 20),
+                          Text(
+                            'Continue with Google',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+>>>>>>> ef1e0c82055e93fcce995533ded362064a5fe2ea
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 30),
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/facebook.png',
+                            width: 20,
+                          ),
+                          SizedBox(width: 20),
+                          Text(
+                            'Continue with Facebook',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -261,17 +394,13 @@ class _LoginState extends State<Login> {
                     children: [
                       Text(
                         "Don't have an account?",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
+                        style: TextStyle(color: Colors.black),
                       ),
                       SizedBox(width: 10),
                       InkWell(
                         onTap: () {
                           Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Signup(),
-                            ),
+                            MaterialPageRoute(builder: (context) => Signup()),
                           );
                         },
                         child: Text(

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:project/halaman/detail.dart';
 import 'package:project/provider.dart';
-import 'package:project/sidepage/setting.dart';
 import 'package:provider/provider.dart';
 import 'package:project/sidepage/bookmark.dart';
 import 'package:project/sidepage/favorite.dart';
 import 'package:project/autentikasi/login.dart';
+
 class Profil extends StatefulWidget {
   const Profil({Key? key}) : super(key: key);
 
@@ -48,132 +48,138 @@ class _ProfilState extends State<Profil> {
   }
 
   void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
       ),
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+    ),
+    builder: (BuildContext context) {
+      // Menggunakan Consumer untuk mendengarkan perubahan tema
+      return Consumer<ChangeTheme>(
+        builder: (context, theme, child) {
+          final isDarkMode = theme.isDark; // Periksa apakah dark mode aktif
+          return Container(
+            decoration: BoxDecoration(
+              color: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
             ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                title: Center(
-                  child: Text(
-                    'Menu',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  title: Center(
+                    child: Text(
+                      'Menu',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Divider(),
-              Wrap(
-                children: <Widget>[
-                  Consumer<ChangeTheme>(
-                    builder: (context, theme, child) {
-                      return SwitchListTile(
-                        title: Row(
-                          children: [
-                            Icon(Icons.dark_mode, color: Colors.black), 
-                            SizedBox(width: 10),
-                            Text('Dark Mode', style: TextStyle(color: Colors.black)),
-                          ],
-                        ),
-                        value: theme.isDark,
-                        onChanged: (bool val) {
-                          setState(() {
-                            theme.change(val);
-                          });
-                        },
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.favorite),
-                    title: Text('Favorite'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FavoritePage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.bookmark),
-                    title: Text('Bookmark'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookmarkPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info),
-                    title: Text('About Us'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('About Us'),
-                            content: Text(
-                              'This app is designed to showcase various presets for editing photos. It provides users with a platform to explore different photo editing styles and purchase presets they like. Feel free to explore and enjoy!',
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                Divider(color: isDarkMode ? Colors.white54 : Colors.black54),
+                Wrap(
+                  children: <Widget>[
+                    SwitchListTile(
+                      title: Row(
+                        children: [
+                          Icon(Icons.dark_mode, color: isDarkMode ? Colors.white : Colors.black),
+                          SizedBox(width: 10),
+                          Text('Dark Mode', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                        ],
+                      ),
+                      value: theme.isDark,
+                      onChanged: (bool val) {
+                        theme.change(val); // Mengubah tema
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.favorite, color: isDarkMode ? Colors.white : Colors.black),
+                      title: Text('Favorite', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FavoritePage(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.bookmark, color: isDarkMode ? Colors.white : Colors.black),
+                      title: Text('Bookmark', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookmarkPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.info, color: isDarkMode ? Colors.white : Colors.black),
+                      title: Text('About Us', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: isDarkMode ? Color.fromARGB(255, 33, 33, 33) : Colors.white,
+                              title: Text(
+                                'About Us',
+                                style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                               ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text('Logout'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+                              content: Text(
+                                'This app is designed to showcase various presets for editing photos. It provides users with a platform to explore different photo editing styles and purchase presets they like. Feel free to explore and enjoy!',
+                                style: TextStyle(color: isDarkMode ? Colors.white70 : Colors.black87),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('OK', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.logout, color: isDarkMode ? Colors.white : Colors.black),
+                      title: Text('Logout', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +216,7 @@ class _ProfilState extends State<Profil> {
                           color: isDarkMode ? Colors.white : Colors.black,
                           shadows: [
                             Shadow(
-                              color: Colors.white,
+                              color: isDarkMode ? Colors.black : Colors.white,
                               blurRadius: 1,
                               offset: Offset(1, 1),
                             ),
@@ -226,7 +232,6 @@ class _ProfilState extends State<Profil> {
                           style: TextStyle(
                             fontSize: 13,
                             color: isDarkMode ? Colors.white : Colors.black,
-                            
                           ),
                         ),
                       ),
@@ -241,7 +246,6 @@ class _ProfilState extends State<Profil> {
                     icon: Icon(Icons.menu),
                     iconSize: 35,
                     color: isDarkMode ? Colors.white : Colors.black,
-
                   )
                 ],
                 toolbarHeight: 50,
@@ -281,11 +285,14 @@ class _ProfilState extends State<Profil> {
                               },
                             );
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ClipRRect(
+                          child: Container(
+                            margin: EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
-                              child: Image.network(imageURL, fit: BoxFit.cover),
+                              image: DecorationImage(
+                                image: NetworkImage(imageURL),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         );

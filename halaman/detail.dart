@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:project/provider.dart';
+import 'package:project/provider.dart'; // Pastikan untuk mengganti dengan path yang benar ke file provider Anda
 
 class ImageDialog extends StatefulWidget {
   final String imageUrl;
@@ -23,7 +23,6 @@ class _ImageDialogState extends State<ImageDialog> {
   @override
   void initState() {
     super.initState();
-
     _isLiked = Provider.of<FavoriteProvider>(context, listen: false).isFavorite(widget.imageUrl);
     _isSaved = Provider.of<BookmarkProvider>(context, listen: false).isBookmarked(widget.imageUrl);
   }
@@ -62,6 +61,7 @@ class _ImageDialogState extends State<ImageDialog> {
       body: Consumer<ChangeTheme>(
         builder: (context, theme, child) {
           return SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(), // Menonaktifkan scroll
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

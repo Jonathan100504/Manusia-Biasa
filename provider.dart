@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChangeTheme extends ChangeNotifier {
   bool isDark = false;
@@ -9,28 +10,10 @@ class ChangeTheme extends ChangeNotifier {
   }
 }
 
-class NotificationProvider extends ChangeNotifier {
-  bool isNotificationOn = false;
-
-  void toggleNotification(bool val) {
-    isNotificationOn = val;
-    notifyListeners();
-  }
-}
-
-class PrivacyProvider extends ChangeNotifier {
-  bool isPrivacyOn = false;
-
-  void togglePrivacy(bool val) {
-    isPrivacyOn = val;
-    notifyListeners();
-  }
-}
-
 class Post {
   final String imageURL;
   final String category;
-  final DateTime? scheduledDateTime; 
+  final DateTime? scheduledDateTime;
 
   Post({
     required this.imageURL,
@@ -42,23 +25,10 @@ class Post {
 class ProfileProvider extends ChangeNotifier {
   List<Post> posts = [];
 
-  void addPost({
-    required String imageURL,
-    required String category,
-    DateTime? scheduledDateTime,
-  }) {
-    Post newPost = Post(
-      imageURL: imageURL,
-      category: category,
-      scheduledDateTime: scheduledDateTime,
-    );
-    posts.add(newPost);
-    
-    if (scheduledDateTime != null) {
-     
-      _scheduleNotification(newPost);
-    }
-    
+  List<Post> get listPostingan => posts;
+
+  void addPosting(Post postingan) {
+    posts.add(postingan);
     notifyListeners();
   }
 
@@ -74,22 +44,19 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
- 
-  void _scheduleNotification(Post post) {
+  void schedulepost(Duration duration, DateTime scheduletime, Post p) async {
+    addPosting(
+      Post(
+          category:
+              "Post available on ${DateFormat("dd MMM yyyy HH:mm").format(scheduletime)}",
+          imageURL: "https://static.thenounproject.com/png/78760-200.png"),
+    );
+    int pos = posts.length - 1;
+    await Future.delayed(duration, () {
+      posts.removeAt(pos);
+      posts.insert(pos, p);
+    });
     notifyListeners();
-  }
-}
-
-class LoveProvider extends ChangeNotifier {
-  Map<String, bool> lovedImages = {};
-
-  void toggleLove(String imageUrl) {
-    lovedImages.update(imageUrl, (value) => !value, ifAbsent: () => true);
-    notifyListeners();
-  }
-
-  bool isLoved(String imageUrl) {
-    return lovedImages[imageUrl] ?? false;
   }
 }
 
@@ -124,5 +91,17 @@ class FavoriteProvider extends ChangeNotifier {
 
   bool isFavorite(String imageUrl) {
     return favoriteImages.contains(imageUrl);
+  }
+}
+
+
+class NotificationProvider extends ChangeNotifier {
+  bool _isNotificationEnabled = false;
+
+  bool get isNotificationEnabled => _isNotificationEnabled;
+
+  void toggleNotification(bool value) {
+    _isNotificationEnabled = value;
+    notifyListeners();
   }
 }
