@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project/autentikasi/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key});
@@ -18,12 +19,17 @@ class _SignupState extends State<Signup> {
   String errorPassword = '';
   String errorConfirmPassword = '';
 
+  Future<void> _registerUser(String user, String pass) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', user);
+    await prefs.setString('password', pass);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-         
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -32,16 +38,14 @@ class _SignupState extends State<Signup> {
               ),
             ),
           ),
-         
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0), 
+            filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3), 
+                color: Colors.black.withOpacity(0.3),
               ),
             ),
           ),
-          
           Positioned(
             top: 50,
             left: 0,
@@ -80,7 +84,7 @@ class _SignupState extends State<Signup> {
                 ),
                 color: Colors.white60,
               ),
-              child: SingleChildScrollView( 
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     SizedBox(height: 40),
@@ -89,7 +93,8 @@ class _SignupState extends State<Signup> {
                       decoration: InputDecoration(
                         labelText: "Username",
                         hintText: "Input Your Name Here",
-                        errorText: errorUsername.isNotEmpty ? errorUsername : null,
+                        errorText:
+                            errorUsername.isNotEmpty ? errorUsername : null,
                         labelStyle: TextStyle(
                           color: Color.fromARGB(255, 25, 25, 25),
                         ),
@@ -112,7 +117,8 @@ class _SignupState extends State<Signup> {
                       decoration: InputDecoration(
                         labelText: "Password",
                         hintText: "Input Your Password Here",
-                        errorText: errorPassword.isNotEmpty ? errorPassword : null,
+                        errorText:
+                            errorPassword.isNotEmpty ? errorPassword : null,
                         labelStyle: TextStyle(
                           color: Color.fromARGB(255, 25, 25, 25),
                         ),
@@ -136,7 +142,9 @@ class _SignupState extends State<Signup> {
                       decoration: InputDecoration(
                         labelText: "Confirm Password",
                         hintText: "Confirm Password",
-                        errorText: errorConfirmPassword.isNotEmpty ? errorConfirmPassword : null,
+                        errorText: errorConfirmPassword.isNotEmpty
+                            ? errorConfirmPassword
+                            : null,
                         labelStyle: TextStyle(
                           color: Color.fromARGB(255, 25, 25, 25),
                         ),
@@ -158,7 +166,7 @@ class _SignupState extends State<Signup> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             String user = username.text;
                             String pass = password.text;
@@ -167,7 +175,9 @@ class _SignupState extends State<Signup> {
                             errorPassword = '';
                             errorConfirmPassword = '';
 
-                            if (user.isEmpty || pass.isEmpty || confPass.isEmpty) {
+                            if (user.isEmpty ||
+                                pass.isEmpty ||
+                                confPass.isEmpty) {
                               if (user.isEmpty) {
                                 errorUsername = "Username cannot be empty";
                               }
@@ -175,19 +185,19 @@ class _SignupState extends State<Signup> {
                                 errorPassword = "Password cannot be empty";
                               }
                               if (confPass.isEmpty) {
-                                errorConfirmPassword = "Confirm Password cannot be empty";
+                                errorConfirmPassword =
+                                    "Confirm Password cannot be empty";
                               }
                             } else if (pass != confPass) {
                               errorConfirmPassword = "Passwords do not match";
                             } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Login(
-                                    username: user,
-                                    password: pass,
+                              _registerUser(user, pass).then((_) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Login(),
                                   ),
-                                ),
-                              );
+                                );
+                              });
                             }
                           });
                         },
