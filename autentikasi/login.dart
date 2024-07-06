@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project/autentikasi/signup.dart';
 import 'package:project/botnavbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
-  final String username;
-  final String password;
-  const Login({Key? key, this.username = '', this.password = ''});
+  const Login({Key? key});
 
   @override
   State<Login> createState() => _LoginState();
@@ -19,11 +18,11 @@ class _LoginState extends State<Login> {
   String _errorTextUsername = '';
   String _errorTextPassword = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _username.text = widget.username;
-    _password.text = widget.password;
+  Future<bool> _authenticateUser(String user, String pass) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? storedUsername = prefs.getString('username');
+    String? storedPassword = prefs.getString('password');
+    return (user == storedUsername && pass == storedPassword);
   }
 
   @override
@@ -73,7 +72,7 @@ class _LoginState extends State<Login> {
             left: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20), 
+              padding: EdgeInsets.symmetric(horizontal: 20),
               height: MediaQuery.of(context).size.height - 180,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
@@ -109,7 +108,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10), 
+                  SizedBox(height: 10),
                   TextField(
                     controller: _password,
                     decoration: InputDecoration(
@@ -135,11 +134,11 @@ class _LoginState extends State<Login> {
                     ),
                     obscureText: true,
                   ),
-                  SizedBox(height: 30), 
+                  SizedBox(height: 30),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         String user = _username.text;
                         String pass = _password.text;
                         _errorTextUsername = '';
@@ -158,12 +157,21 @@ class _LoginState extends State<Login> {
                         }
 
                         if (user.isNotEmpty && pass.isNotEmpty) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => botNavBar()),
-                            (route) => false,
-                          );
+                          bool isAuthenticated =
+                              await _authenticateUser(user, pass);
+                          if (isAuthenticated) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => botNavBar()),
+                              (route) => false,
+                            );
+                          } else {
+                            setState(() {
+                              _errorTextPassword =
+                                  'Invalid username or password';
+                            });
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -177,7 +185,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30), 
+                  SizedBox(height: 30),
                   OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
@@ -203,7 +211,7 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10), 
+                  SizedBox(height: 10),
                   OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
